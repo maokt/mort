@@ -1,7 +1,7 @@
 .PHONY : all
 all: mort
 
-CC := clang -std=c11
+CFLAGS := -std=c11
 
 test: t
 	make -C t
@@ -9,5 +9,5 @@ test: t
 
 .PHONY : clean
 clean:
+	rm -f mort
 	make -C t clean
-	rm mort

@@ -5,4 +5,4 @@ CC := clang -std=c11
 
 .PHONY : clean
 clean:
-	rm daemon
+	rm -f daemon
