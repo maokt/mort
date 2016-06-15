@@ -3,7 +3,7 @@ all: mort
 
 CFLAGS := -std=c11
 
-test: t
+test: mort
 	make -C t
 	prove
 
