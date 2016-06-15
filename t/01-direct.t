@@ -18,6 +18,6 @@ use Test::More tests => 8;
 
 {
     my @res = qx{./mort};
-    is $?, 0, "no error for nothing";
+    is $?>>8, 64, "usage error for nothing";
     is scalar @res, 0, "no results";
 }

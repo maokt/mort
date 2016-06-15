@@ -17,6 +17,11 @@ static void explain_exit(pid_t p, int e) {
 
 int main(int argc, char *argv[]) {
     
+    if (argc <= 1) {
+        fprintf(stderr, "usage: %s <command>\n", argv[0]);
+        return EX_USAGE;
+    }
+
     int erc = prctl(PR_SET_CHILD_SUBREAPER, 1);
     if (erc != 0) {
         perror("set child subreaper failed");
