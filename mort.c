@@ -39,17 +39,15 @@ int main(int argc, char *argv[]) {
         return EX_UNAVAILABLE;
     }
 
-    int first_status = 0;
     int status;
     pid_t reap_kid;
     while ((reap_kid = wait(&status)) > 0) {
         explain_exit(reap_kid, status);
-        if (reap_kid == first_kid) first_status = status;
     }
+
     if (reap_kid == -1 && errno == ECHILD) {
         // nothing to wait for; nothing left to do
-        if (WIFEXITED(first_status)) return WEXITSTATUS(first_status);
-        else return EX_IOERR;
+        return 0;
     }
 
     return EX_SOFTWARE;
