@@ -1,8 +1,6 @@
 .PHONY : all
 all: mort
 
-CFLAGS := -std=c11
-
 test: mort
 	make -C t
 	prove

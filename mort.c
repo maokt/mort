@@ -16,9 +16,23 @@ static void explain_exit(pid_t p, int e) {
 }
 
 int main(int argc, char *argv[]) {
-    
-    if (argc <= 1) {
-        fprintf(stderr, "usage: %s <command>\n", argv[0]);
+
+    int opt, quiet=0;
+
+    /* the + option will convince GNU libc to behave posixly correctly. Grrrr.... */
+    while ((opt = getopt(argc, argv, "+q")) != -1) {
+        switch (opt) {
+            case 'q':
+                quiet = 1;
+                break;
+            default: /* '?' */
+                fprintf(stderr, "usage: %s [-q] <command>\n", argv[0]);
+                return EX_USAGE;
+        }
+    }
+
+    if (optind >= argc) {
+        fprintf(stderr, "usage: %s [-q] <command>\n", argv[0]);
         return EX_USAGE;
     }
 
@@ -34,7 +48,7 @@ int main(int argc, char *argv[]) {
         return EX_OSERR;
     }
     else if (first_kid == 0) {
-        execvp(argv[1], argv+1);
+        execvp(argv[optind], argv+optind);
         perror("exec failed");
         return EX_UNAVAILABLE;
     }
@@ -42,7 +56,7 @@ int main(int argc, char *argv[]) {
     int status;
     pid_t reap_kid;
     while ((reap_kid = wait(&status)) > 0) {
-        explain_exit(reap_kid, status);
+        if (!quiet) explain_exit(reap_kid, status);
     }
 
     if (reap_kid == -1 && errno == ECHILD) {
