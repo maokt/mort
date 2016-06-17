@@ -7,6 +7,9 @@ use v5.12;
 # 2. the parent of this script, which should be mort
 # 3. this helper script itself, if mort exec'd this script directly
 #
+# We test 2 things:
+# 1. that the daemon is adopted as expected
+# 2. if helper is selected, the helper should adopt the daemon
 
 my %opt = (
     init => 1,
@@ -50,17 +53,15 @@ if ($tmp == 0) {
 
     # and now, the actual test we want:
     if ($parent == $expect) {
-        say "ok - daemon parent is $parent";
-    }
-    else {
-        say "not ok - daemon parent is $parent but expected $expect";
+        say "ok - daemon $$ parent is $parent";
+    } else {
+        say "not ok - daemon $$ parent is $parent but expected $expect";
     }
 
     close $wup; # rendevous with the script
     exit 0;
 
-}
-else {
+} else {
     close $rdown;
     close $wup;
 
@@ -68,6 +69,22 @@ else {
     waitpid $tmp, 0;
     close $wdown; # signal daemon
     my $wait = <$rup>; # wait for daemon's signal
+    my $kid = wait; # wait for the daemon itself, maybe
+
+    if ($expect == $$) {
+        # I'm supposed to adopt the daemon
+        if ($kid > 0) {
+            say "ok - $$ adopted daemon $kid";
+        } else {
+            say "not ok - $$ has no children";
+        }
+    } else {
+        if ($kid > 0) {
+            say "not ok - $$ adopted unexpected child";
+        } else {
+            say "ok - $$ has no children";
+        }
+    }
     exit 0;
 }
 
