@@ -17,13 +17,17 @@ static void explain_exit(pid_t p, int e) {
 
 int main(int argc, char *argv[]) {
 
-    int opt, quiet=0;
+    int opt, quiet=0, opt_x=0;
 
     /* the + option will convince GNU libc to behave posixly correctly. Grrrr.... */
-    while ((opt = getopt(argc, argv, "+q")) != -1) {
+    while ((opt = getopt(argc, argv, "+qx")) != -1) {
         switch (opt) {
             case 'q':
                 quiet = 1;
+                break;
+            case 'x':
+                /* exec without fork */
+                opt_x = 1;
                 break;
             default: /* '?' */
                 fprintf(stderr, "usage: %s [-q] <command>\n", argv[0]);
@@ -42,7 +46,7 @@ int main(int argc, char *argv[]) {
         return EX_OSERR;
     }
 
-    pid_t first_kid = fork();
+    pid_t first_kid = opt_x ? 0 : fork();
     if (first_kid == -1) {
         perror("fork failed");
         return EX_OSERR;
