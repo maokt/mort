@@ -3,7 +3,7 @@ use v5.12;
 
 # not using Test::More so we can avoid some test counting issues while forking
 
-say "1..3";
+say "1..6";
 
 system "./t/adopt-by.pl", "init";
 system "./mort", "-q", "./t/adopt-by.pl", "parent";
