@@ -30,15 +30,11 @@ int main(int argc, char *argv[]) {
                 opt_x = 1;
                 break;
             default: /* '?' */
-                fprintf(stderr, "usage: %s [-q] <command>\n", argv[0]);
-                return EX_USAGE;
+                goto usage;
         }
     }
 
-    if (optind >= argc) {
-        fprintf(stderr, "usage: %s [-q] <command>\n", argv[0]);
-        return EX_USAGE;
-    }
+    if (optind >= argc) goto usage;
 
     int erc = prctl(PR_SET_CHILD_SUBREAPER, 1);
     if (erc != 0) {
@@ -69,5 +65,9 @@ int main(int argc, char *argv[]) {
     }
 
     return EX_SOFTWARE;
+
+usage:
+    fprintf(stderr, "usage: %s [-qx] <command>\n", argv[0]);
+    return EX_USAGE;
 }
 
