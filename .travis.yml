@@ -3,4 +3,4 @@ script: make test
 addons:
     apt:
         packages:
-            - linux-headers-3.13.0-29-generic
+            - linux-headers-3.13.0-40-generic
