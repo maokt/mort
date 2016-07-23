@@ -1,5 +1,5 @@
 language: c
-script: make test
+script: make CPPFLAGS=-I/usr/src/linux-headers-3.13.0-40/include/uapi test
 addons:
     apt:
         packages:
