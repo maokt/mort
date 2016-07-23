@@ -1,6 +1,8 @@
 Mort
 ====
 
+[![Travis status](https://api.travis-ci.org/maokt/mort.svg)](https://travis-ci.org/maokt/mort)
+
 **tl;dr** Mort prevents daemons from being adopted by pid 1, making them easier to manage with runit.
 
 Mort is a simple program for Linux (only) that will adopt any orphaned descendents, in place of pid 1. It will wait for all
